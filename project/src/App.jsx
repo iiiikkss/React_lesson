@@ -1,18 +1,12 @@
-import { useState } from 'react';
-import { Message } from './components/Message';
-import './index.css';
+import { MessageList } from './components/MessageList';
+import "./index.css";
 
-export const App = () => {
-  const [text,  setText] = useState('Message тект')
+export const App = () => { 
 
-const handelChangeText = (element) =>{
-  setText(element.target.value)
-}
 
-  return (
-    <div className="App">
-        <input className='message' type="text" onChange={handelChangeText} />
-        <Message text={text}/>
-    </div>
-  );
-}
+    return (
+      <div className="App">
+        <MessageList />
+      </div>
+    );
+};
