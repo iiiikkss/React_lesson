@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { MessageList } from './MessageList';
 import { Users } from './Users';
+import style from "./style/message.module.css";
 
 
-export const Message = () => {
+
+export const Message = ({addMessages}) => {
 
   
     const [text, setText] = useState();
@@ -21,8 +22,8 @@ export const Message = () => {
   
     return (
       <>
-        <input className='message' type="text" onChange={handleText} />
-        <button disabled={!text} onClick={handleMessages}>
+        <input className={style.input} type="text" onChange={handleText} />
+        <button className={style.button} disabled={!text} onClick={handleMessages}>
           Отправить
         </button>
 

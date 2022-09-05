@@ -25,8 +25,8 @@ export const MessageList = () => {
           return () => clearTimeout(timeout);
         }
       }, [messageList]);
-    return<>
-        <RenderMess messageList={messageList} />
+    return(<>
         <Message addMessages={addMessages} />
-    </>
+        <RenderMess messageList={messageList} />
+    </>);
 }
