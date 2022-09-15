@@ -10,11 +10,11 @@ import { Header } from './components/Header';
 const defaultChats: Chat[] = [
   {
     id: '1',
-    name: 'first',
+    name: 'Misha',
   },
   {
     id: '2',
-    name: 'second',
+    name: 'Mark',
   },
 ];
 
@@ -42,30 +42,41 @@ export const App: FC = () => {
     });
   };
 
+  const onDeleteChat = (chatId: string) => {
+    setChats(chats.filter((chat) => chat.id !== chatId));
+  };
+
   return (
     <Routes>
-      <Route path="/" element={<Header />}>
-        <Route index element={<Main />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="chats">
-          <Route
-            index
-            element={<ChatList chats={chats} onAddChat={onAddChat} />}
-          />
-          <Route
-            path=":chatId"
-            element={
-              <ChatPage
-                chats={chats}
-                onAddChat={onAddChat}
-                messages={messages}
-                onAddMessage={onAddMessage}
-              />
-            }
-          />
-        </Route>
+    <Route path="/" element={<Header />}>
+      <Route index element={<Main />} />
+      <Route path="profile" element={<Profile />} />
+      <Route path="chats">
+        <Route
+          index
+          element={
+            <ChatList
+              chats={chats}
+              onAddChat={onAddChat}
+              onDeleteChat={onDeleteChat}
+            />
+          }
+        />
+        <Route
+          path=":chatId"
+          element={
+            <ChatPage
+              chats={chats}
+              onAddChat={onAddChat}
+              messages={messages}
+              onAddMessage={onAddMessage}
+              onDeleteChat={onDeleteChat}
+            />
+          }
+        />
       </Route>
-      <Route path="*" element={<div>404 page</div>} />
-    </Routes>
+    </Route>
+    <Route path="*" element={<div>404 page</div>} />
+  </Routes>
   );
 };
