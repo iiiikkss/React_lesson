@@ -16,19 +16,24 @@ const navigate = [
     name: 'Profile',
     path: '/profile',
   },
+  {
+    name: 'About',
+    path: '/about',
+  },
 ];
 
 export const Header: FC = () => {
   return (
     <>
-      <header style={{ backgroundColor: 'grey' }}>
+      <header className={style.header}>
         <ul className={style.ul}>
           {navigate.map((item, idx) => (
             <li key={idx}>
               <NavLink
+                className={style.li}
                 to={item.path}
                 style={({ isActive }) => ({
-                  color: isActive ? 'green' : 'blue',
+                  color: isActive ? 'maroon' : 'white',
                 })}
               >
                 {item.name}

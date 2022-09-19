@@ -2,17 +2,16 @@ import MUIButton from '@mui/material/Button';
 import { FC } from 'react';
 
 interface ButtonProps {
+  children: React.ReactNode;
   disabled?: boolean;
   click?: () => void;
-  children: React.ReactNode;
   render?: (label: string) => JSX.Element;
 }
 
 export const Button: FC<ButtonProps> = ({
+  render,
   disabled = false,
   click = () => null,
-  // children,
-  render,
 }) => (
   <MUIButton
     disabled={disabled}
@@ -21,6 +20,6 @@ export const Button: FC<ButtonProps> = ({
     onClick={click}
     data-testid="button"
   >
-    {render && render('send')}
+    {render && render('Отправить')}
   </MUIButton>
 );

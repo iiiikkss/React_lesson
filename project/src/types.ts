@@ -1,6 +1,6 @@
 export interface Message {
   author: AUTHOR;
-  value: string;
+  text?: string;
 }
 
 export type Messages = Record<string, Message[]>;

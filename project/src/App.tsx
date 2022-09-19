@@ -1,82 +1,48 @@
-import { FC, useState } from 'react';
+import React, { FC, useState, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Main } from './pages/Main';
-import { Profile } from './pages/Profile';
 import { ChatList } from './components/ChatList';
-import { AUTHOR, Chat, Message, Messages } from './types';
-import { ChatPage } from './pages/ChatPage';
+import { ChatPage } from './pages/ChatPage/ChatPage';
 import { Header } from './components/Header';
+import { ThemeContext } from './utils/ThemeContect';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { AboutWithConnect } from './pages/About';
 
-const defaultChats: Chat[] = [
-  {
-    id: '1',
-    name: 'Misha',
-  },
-  {
-    id: '2',
-    name: 'Mark',
-  },
-];
-
-const defaultMessages: Messages = {
-  '1': [{ author: AUTHOR.USER, value: 'hello, world' }],
-  '2': [{ author: AUTHOR.BOT, value: 'hello, im bot' }],
-};
+const Profile = React.lazy(() =>
+  Promise.all([
+    import('./pages/Profile').then(({ Profile }) => ({
+      default: Profile,
+    })),
+    new Promise((resolve) => setTimeout(resolve, 1000)),
+  ]).then(([moduleExport]) => moduleExport)
+);
 
 export const App: FC = () => {
-  const [chats, setChats] = useState<Chat[]>(defaultChats);
-  const [messages, setMessages] = useState<Messages>(defaultMessages);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-  const onAddChat = (newChat: Chat) => {
-    setChats([...chats, newChat]);
-    setMessages({
-      ...messages,
-      [newChat.id]: [],
-    });
-  };
-
-  const onAddMessage = (chatId: string, newMessage: Message) => {
-    setMessages({
-      ...messages,
-      [chatId]: [...messages[chatId], newMessage],
-    });
-  };
-
-  const onDeleteChat = (chatId: string) => {
-    setChats(chats.filter((chat) => chat.id !== chatId));
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   return (
-    <Routes>
-    <Route path="/" element={<Header />}>
-      <Route index element={<Main />} />
-      <Route path="profile" element={<Profile />} />
-      <Route path="chats">
-        <Route
-          index
-          element={
-            <ChatList
-              chats={chats}
-              onAddChat={onAddChat}
-              onDeleteChat={onDeleteChat}
-            />
-          }
-        />
-        <Route
-          path=":chatId"
-          element={
-            <ChatPage
-              chats={chats}
-              onAddChat={onAddChat}
-              messages={messages}
-              onAddMessage={onAddMessage}
-              onDeleteChat={onDeleteChat}
-            />
-          }
-        />
-      </Route>
-    </Route>
-    <Route path="*" element={<div>404 page</div>} />
-  </Routes>
+    <Provider store={store}>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Header />}>
+              <Route index element={<Main />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="about" element={<AboutWithConnect />} />
+              <Route path="chats">
+                <Route index element={<ChatList />} />
+                <Route path=":chatId" element={<ChatPage />} />
+              </Route>
+            </Route>
+            <Route path="*" element={<div>404 page</div>} />
+          </Routes>
+        </Suspense>
+      </ThemeContext.Provider>
+    </Provider>
   );
 };

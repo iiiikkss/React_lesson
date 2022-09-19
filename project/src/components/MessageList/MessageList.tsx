@@ -1,18 +1,19 @@
+import { List, ListItem } from '@mui/material';
 import { FC } from 'react';
 import { Message } from 'src/types';
 
-interface MessageListProps {
-  messages: Message[];
+interface MassageProps {
+  messageList: Message[];
 }
 
-export const MessageList: FC<MessageListProps> = ({ messages }) => {
+export const MessageList: FC<MassageProps> = ({ messageList }) => {
   return (
-    <ul>
-      {messages.map((message, idx) => (
-        <li key={idx} data-testid="li">
-          {message.author}: {message.value}
-        </li>
+    <List>
+      {messageList.map((item, idx) => (
+        <ListItem key={idx} data-testid="li">
+          {item.author} : {item.text}
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 };
