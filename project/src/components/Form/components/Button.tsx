@@ -2,13 +2,14 @@ import MUIButton from '@mui/material/Button';
 import { FC } from 'react';
 
 interface ButtonProps {
-  label: string;
+  children: React.ReactNode;
   disabled?: boolean;
   click?: () => void;
+  render?: (label: string) => JSX.Element;
 }
 
 export const Button: FC<ButtonProps> = ({
-  label,
+  render,
   disabled = false,
   click = () => null,
 }) => (
@@ -17,7 +18,8 @@ export const Button: FC<ButtonProps> = ({
     variant="contained"
     type="submit"
     onClick={click}
+    data-testid="button"
   >
-    {label}
+    {render && render('Отправить')}
   </MUIButton>
 );
